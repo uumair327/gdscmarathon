@@ -62,8 +62,7 @@ class _MarathonScreenState extends State<MarathonScreen> {
                         children: [
                           const Text(
                             'Timer:',
-                            style:
-                                TextStyle(fontSize: 18, color: Colors.white),
+                            style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                           Text(
                             '$timerValue',
@@ -85,8 +84,7 @@ class _MarathonScreenState extends State<MarathonScreen> {
                         children: [
                           const Text(
                             'Checkpoint:',
-                            style:
-                                TextStyle(fontSize: 18, color: Colors.white),
+                            style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                           Text(
                             '$checkpoint',
@@ -153,13 +151,22 @@ class _MarathonScreenState extends State<MarathonScreen> {
                                 padding: const EdgeInsets.all(16),
                               ),
                               onPressed: () {
-                                _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
-                                    context: context,
-                                    onCode: (code) {
-                                      setState(() {
-                                        this.code = code;
-                                      });
+                                _qrBarCodeScannerDialogPlugin
+                                    .getScannedQrBarCode(
+                                  context: context,
+                                  onCode: (scannedCode) {
+                                    setState(() {
+                                      this.code = scannedCode;
+                                      if (scannedCode ==
+                                              'GDSC: Check Point 1' ||
+                                          scannedCode ==
+                                              'GDSC: Check Point 2') {
+                                        // Update checkpoint logic
+                                        checkpoint++;
+                                      }
                                     });
+                                  },
+                                );
                               },
                               child: Text(
                                 option,
