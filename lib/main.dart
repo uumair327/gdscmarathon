@@ -5,7 +5,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MarathonScreen extends StatefulWidget {
-  const MarathonScreen({super.key});
+  const MarathonScreen({Key? key}) : super(key: key);
 
   @override
   _MarathonScreenState createState() => _MarathonScreenState();
@@ -49,29 +49,50 @@ class _MarathonScreenState extends State<MarathonScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(
-                  children: [
-                    const Text(
-                      'Timer:',
-                      style: TextStyle(fontSize: 18),
+                Expanded(
+                  child: Card(
+                    color: Colors.blue, // Background color
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          const Text(
+                            'Timer:',
+                            style:
+                                TextStyle(fontSize: 18, color: Colors.white),
+                          ),
+                          Text(
+                            '$timerValue',
+                            style: const TextStyle(
+                                fontSize: 24, color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
-                    Text(
-                      '$timerValue',
-                      style: const TextStyle(fontSize: 24),
-                    ),
-                  ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    const Text(
-                      'Checkpoint:',
-                      style: TextStyle(fontSize: 18),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Card(
+                    color: Colors.blue, // Background color
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          const Text(
+                            'Checkpoint:',
+                            style:
+                                TextStyle(fontSize: 18, color: Colors.white),
+                          ),
+                          Text(
+                            '$checkpoint',
+                            style: const TextStyle(
+                                fontSize: 24, color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
-                    Text(
-                      '$checkpoint',
-                      style: const TextStyle(fontSize: 24),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -88,7 +109,7 @@ class _MarathonScreenState extends State<MarathonScreen> {
                   value: value,
                   child: Text(
                     value,
-                    style: const TextStyle(fontSize: 18, color: Colors.black),
+                    style: const TextStyle(fontSize: 18, color: Colors.blue),
                   ),
                 );
               }).toList(),
@@ -119,11 +140,22 @@ class _MarathonScreenState extends State<MarathonScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: options
                         .map(
-                          (option) => ElevatedButton(
-                            onPressed: () {
-                              // Handle option selection logic
-                            },
-                            child: Text(option),
+                          (option) => Container(
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.blue, // Background color
+                                onPrimary: Colors.white, // Text color
+                                padding: const EdgeInsets.all(16),
+                              ),
+                              onPressed: () {
+                                // Handle option selection logic
+                              },
+                              child: Text(
+                                option,
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                            ),
                           ),
                         )
                         .toList(),
