@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +33,9 @@ class _MarathonScreenState extends State<MarathonScreen> {
   int checkpoint = 0;
   String selectedDifficulty = 'easy'; // Default difficulty
   bool marathonStarted = false;
+
+  final _qrBarCodeScannerDialogPlugin = QrBarCodeScannerDialog();
+  String? code;
 
   String question = 'What is the capital of Flutterland?';
   List<String> options = ['Option A', 'Option B', 'Option C', 'Option D'];
@@ -149,7 +153,13 @@ class _MarathonScreenState extends State<MarathonScreen> {
                                 padding: const EdgeInsets.all(16),
                               ),
                               onPressed: () {
-                                // Handle option selection logic
+                                _qrBarCodeScannerDialogPlugin.getScannedQrBarCode(
+                                    context: context,
+                                    onCode: (code) {
+                                      setState(() {
+                                        this.code = code;
+                                      });
+                                    });
                               },
                               child: Text(
                                 option,
