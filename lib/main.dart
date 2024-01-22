@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
-import 'dart:async';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,7 +30,12 @@ class MarathonScreen extends StatefulWidget {
 }
 
 class _MarathonScreenState extends State<MarathonScreen> {
-  final stopwatch = Stopwatch();
+  final stopwatch = StopWatchTimer(
+    onChange: (value) {
+      final displayTime = StopWatchTimer.getDisplayTime(value);
+    }
+  );
+
   int checkpoint = 0;
   String selectedDifficulty = 'easy'; // Default difficulty
   bool marathonStarted = false;
@@ -49,6 +54,17 @@ class _MarathonScreenState extends State<MarathonScreen> {
     String seconds = ((duration.inMilliseconds ~/ 1000) % 60).toString().padLeft(2, "0"); // this is for the second
     String minutes = ((duration.inMilliseconds ~/ 1000) ~/ 60).toString().padLeft(2, "0");
     return "$minutes : $seconds : $milliseconds";
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() async {
+    super.dispose();
+    await stopwatch.dispose();  // Need to call dispose function.
   }
   
   @override
@@ -76,7 +92,7 @@ class _MarathonScreenState extends State<MarathonScreen> {
                             style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                           Text(
-                            '${_printDuration(stopwatch.elapsed)}',
+                            "",
                             style: const TextStyle(
                                 fontSize: 24, color: Colors.white),
                           ),
@@ -134,7 +150,7 @@ class _MarathonScreenState extends State<MarathonScreen> {
                 onPressed: () {
                   setState(() {
                     marathonStarted = true;
-                    stopwatch.start();
+                    stopwatch.onStartTimer();
                   });
                 },
                 child: const Text(
