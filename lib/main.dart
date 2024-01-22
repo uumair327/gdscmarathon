@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
+import 'dart:async';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +30,7 @@ class MarathonScreen extends StatefulWidget {
 }
 
 class _MarathonScreenState extends State<MarathonScreen> {
-  int timerValue = 0; // You can replace this with the actual timer value
+  final stopwatch = Stopwatch();
   int checkpoint = 0;
   String selectedDifficulty = 'easy'; // Default difficulty
   bool marathonStarted = false;
@@ -37,9 +38,19 @@ class _MarathonScreenState extends State<MarathonScreen> {
   final _qrBarCodeScannerDialogPlugin = QrBarCodeScannerDialog();
   String? code;
 
-  String question = 'What is the capital of Flutterland?';
+  String questionS = 'Marathon Start Question';
+  String question1 = 'Checkpoint 1 Question';
+  String question2 = 'Checkpoint 2 Question';
+
   List<String> options = ['Option A', 'Option B', 'Option C', 'Option D'];
 
+  String _printDuration(Duration duration) {
+    String milliseconds = (duration.inMilliseconds % 1000).toString().padLeft(2, "0"); // this one for the miliseconds
+    String seconds = ((duration.inMilliseconds ~/ 1000) % 60).toString().padLeft(2, "0"); // this is for the second
+    String minutes = ((duration.inMilliseconds ~/ 1000) ~/ 60).toString().padLeft(2, "0");
+    return "$minutes : $seconds : $milliseconds";
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +76,7 @@ class _MarathonScreenState extends State<MarathonScreen> {
                             style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                           Text(
-                            '$timerValue',
+                            '${_printDuration(stopwatch.elapsed)}',
                             style: const TextStyle(
                                 fontSize: 24, color: Colors.white),
                           ),
@@ -118,23 +129,25 @@ class _MarathonScreenState extends State<MarathonScreen> {
               style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  marathonStarted = true;
-                });
-              },
-              child: const Text(
-                'Start Marathon',
-                style: TextStyle(fontSize: 18),
+            if(!marathonStarted)
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    marathonStarted = true;
+                    stopwatch.start();
+                  });
+                },
+                child: const Text(
+                  'Start Marathon',
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
-            ),
             if (marathonStarted)
               Column(
                 children: [
                   const SizedBox(height: 20),
                   Text(
-                    question,
+                    questionS,
                     style: const TextStyle(fontSize: 20),
                   ),
                   const SizedBox(height: 20),
@@ -157,14 +170,18 @@ class _MarathonScreenState extends State<MarathonScreen> {
                                   onCode: (scannedCode) {
                                     setState(() {
                                       this.code = scannedCode;
-                                      if (scannedCode ==
-                                              'GDSC: Check Point 1' ||
-                                          scannedCode ==
-                                              'GDSC: Check Point 2') {
+                                      switch (scannedCode){
+                                        case "GDSC: Check Point 1":
+                                          questionS = question1;
+                                          break;
+                                        case "GDSC: Check Point 2":
+                                          questionS = question2;
+                                          break;
+                                        }
                                         // Update checkpoint logic
                                         checkpoint++;
                                       }
-                                    });
+                                    );
                                   },
                                 );
                               },
