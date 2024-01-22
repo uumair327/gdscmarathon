@@ -91,10 +91,26 @@ class _MarathonScreenState extends State<MarathonScreen> {
                             'Timer:',
                             style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
-                          Text(
-                            "",
-                            style: const TextStyle(
-                                fontSize: 24, color: Colors.white),
+                          StreamBuilder<int>(
+                            stream: stopwatch.rawTime,
+                            initialData: stopwatch.rawTime.value,
+                            builder: (context, snap) {
+                              final value = snap.data!;
+                              final displayTime =
+                              StopWatchTimer.getDisplayTime(value);
+                              return Column(
+                                children: <Widget>[
+                                     Text(
+                                      displayTime,
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 23,
+                                      ),
+                                    ),
+
+                                ],
+                              );
+                            },
                           ),
                         ],
                       ),
