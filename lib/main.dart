@@ -30,11 +30,9 @@ class MarathonScreen extends StatefulWidget {
 }
 
 class _MarathonScreenState extends State<MarathonScreen> {
-  final stopwatch = StopWatchTimer(
-    onChange: (value) {
-      final displayTime = StopWatchTimer.getDisplayTime(value);
-    }
-  );
+  final stopwatch = StopWatchTimer(onChange: (value) {
+    final displayTime = StopWatchTimer.getDisplayTime(value);
+  });
 
   int checkpoint = 0;
   String selectedDifficulty = 'easy'; // Default difficulty
@@ -50,9 +48,14 @@ class _MarathonScreenState extends State<MarathonScreen> {
   List<String> options = ['Option A', 'Option B', 'Option C', 'Option D'];
 
   String _printDuration(Duration duration) {
-    String milliseconds = (duration.inMilliseconds % 1000).toString().padLeft(2, "0"); // this one for the miliseconds
-    String seconds = ((duration.inMilliseconds ~/ 1000) % 60).toString().padLeft(2, "0"); // this is for the second
-    String minutes = ((duration.inMilliseconds ~/ 1000) ~/ 60).toString().padLeft(2, "0");
+    String milliseconds = (duration.inMilliseconds % 1000)
+        .toString()
+        .padLeft(2, "0"); // this one for the miliseconds
+    String seconds = ((duration.inMilliseconds ~/ 1000) % 60)
+        .toString()
+        .padLeft(2, "0"); // this is for the second
+    String minutes =
+        ((duration.inMilliseconds ~/ 1000) ~/ 60).toString().padLeft(2, "0");
     return "$minutes : $seconds : $milliseconds";
   }
 
@@ -64,9 +67,9 @@ class _MarathonScreenState extends State<MarathonScreen> {
   @override
   void dispose() async {
     super.dispose();
-    await stopwatch.dispose();  // Need to call dispose function.
+    await stopwatch.dispose(); // Need to call dispose function.
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,17 +100,16 @@ class _MarathonScreenState extends State<MarathonScreen> {
                             builder: (context, snap) {
                               final value = snap.data!;
                               final displayTime =
-                              StopWatchTimer.getDisplayTime(value);
+                                  StopWatchTimer.getDisplayTime(value);
                               return Column(
                                 children: <Widget>[
-                                     Text(
-                                      displayTime,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 23,
-                                      ),
+                                  Text(
+                                    displayTime,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 23,
                                     ),
-
+                                  ),
                                 ],
                               );
                             },
@@ -161,7 +163,7 @@ class _MarathonScreenState extends State<MarathonScreen> {
               style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 20),
-            if(!marathonStarted)
+            if (!marathonStarted)
               ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -202,17 +204,18 @@ class _MarathonScreenState extends State<MarathonScreen> {
                                   onCode: (scannedCode) {
                                     setState(() {
                                       this.code = scannedCode;
-                                      switch (scannedCode){
+                                      switch (scannedCode) {
                                         case "GDSC: Check Point 1":
+                                          checkpoint = 1;
                                           questionS = question1;
                                           break;
                                         case "GDSC: Check Point 2":
+                                        checkpoint =2;
                                           questionS = question2;
-                                          break;
-                                        }
-                                        // Update checkpoint logic
-                                        checkpoint++;
+                                        break;
                                       }
+                                      // Update checkpoint logic
+                                       }
                                     );
                                   },
                                 );
